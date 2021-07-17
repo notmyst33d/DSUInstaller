@@ -3,6 +3,7 @@ package com.myst33d.dsuinstaller
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     var dsuPackage by rememberSaveable { mutableStateOf("") }
                     var showDaemonDialog by rememberSaveable { mutableStateOf(false) }
 
-                    val dataSizeValid = dataSize.toIntOrNull() != null
+                    val dataSizeValid = dataSize.toLongOrNull() != null
                     val dsuPackageValid = dsuPackage != "" && dsuPackage.startsWith("content://")
 
                     dsuCallback = { dsuPackage = it }
@@ -153,7 +154,7 @@ class MainActivity : ComponentActivity() {
                                     if (!daemon.isConnected) {
                                         showDaemonDialog = true
                                     } else {
-                                        val finalDataSize = dataSize.toInt() * 1024 * 1024 * 1024
+                                        val finalDataSize = dataSize.toLong() * 1024 * 1024 * 1024
                                         GlobalScope.launch(Dispatchers.IO) {
                                             outputStream.write("flash_dsu_package|$dsuPackage|$finalDataSize\n")
                                             outputStream.flush()
